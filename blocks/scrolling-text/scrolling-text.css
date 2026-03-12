@@ -1,0 +1,18 @@
+.scrolling-text{overflow:hidden;
+                white-space: nowrap;
+               width:100%;
+               position: relative;}
+
+.scrolling-text p {
+  display: inline-block;
+  font-size: 80px;
+  font-weight: 600;
+  color: transparent ;
+  -webkit-text-stroke: 1px #ccc;
+  animation: scrolltext 20s Linear infinite;
+}
+
+@keyframe scrollText {
+  from{transform: translateX(100%);}
+  to {transform: translateX(-100%);}
+}
