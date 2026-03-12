@@ -1,0 +1,51 @@
+/* ===== Hero Title Block ===== */
+
+.block.hero-title {
+  /* spacing around the title section */
+  padding: clamp(24px, 6vw, 56px) 16px;
+  text-align: center;
+}
+
+/* Eyebrow / Tagline (top small red line) */
+.block.hero-title .eyebrow {
+  color: #e41e26; /* red as in your screenshot */
+  font: 600 clamp(12px, 2.3vw, 18px)/1.2 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: 0.2px;
+  margin: 0 0 10px;
+}
+
+/* Main headline */
+.block.hero-title h1 {
+  margin: 0;
+  color: #111;
+  font: 700 clamp(28px, 6.8vw, 72px)/1.1 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  word-break: break-word;
+}
+
+/* Highlighted word in the headline */
+.block.hero-title h1 .accent {
+  color: #e41e26; /* red */
+}
+
+/* Optional: soften the overall section width on very large screens */
+@media (min-width: 1200px) {
+  .block.hero-title {
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+}
+
+/* Optional: subtle entrance animation */
+@media (prefers-reduced-motion: no-preference) {
+  .block.hero-title .eyebrow,
+  .block.hero-title h1 {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: heroTitleFade 500ms ease-out forwards;
+  }
+  .block.hero-title h1 { animation-delay: 80ms; }
+  @keyframes heroTitleFade {
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+``
