@@ -1,0 +1,110 @@
+/* ============================
+   IMAGE CAROUSEL (EDS)
+   - 4 cards per view on desktop
+   - Horizontal scroll with arrows
+   - Rounded corners + subtle shadow
+=============================== */
+
+.block.image-carousel {
+  position: relative;
+  --gap: 20px;
+  --edge-fade-w: 36px;                 /* width for gradient edges */
+  --slide-w: clamp(220px, 24vw, 320px);/* targets ~4 per row on desktop */
+  --radius: 12px;
+}
+
+/* Scroller row */
+.block.image-carousel .scroller {
+  display: flex;
+  overflow-x: auto;
+  gap: var(--gap);
+  padding: 8px calc(var(--edge-fade-w) + 8px) 12px; /* space for fades/arrows */
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: calc(var(--edge-fade-w) + 8px);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional slim scrollbar */
+.block.image-carousel .scroller::-webkit-scrollbar { height: 8px; }
+.block.image-carousel .scroller::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.2);
+  border-radius: 8px;
+}
+
+/* Each slide */
+.block.image-carousel .slide {
+  flex: 0 0 var(--slide-w);
+  scroll-snap-align: start;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(0,0,0,.08);
+  position: relative;
+}
+
+/* Make the images fill the tile neatly */
+.block.image-carousel .slide img {
+  display: block;
+  width: 100%;
+  height: auto;               /* keeps intrinsic ratio */
+  aspect-ratio: 16 / 10;      /* helps consistent height; adjust to taste */
+  object-fit: cover;
+}
+
+/* Nav arrows (progressive enhancement) */
+.block.image-carousel .nav {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: var(--edge-fade-w);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* wrapper doesn't block scrolling */
+}
+
+.block.image-carousel .nav button {
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #222;
+  font-size: 20px;
+}
+
+.block.image-carousel .nav button:disabled { opacity: .45; cursor: default; }
+.block.image-carousel .nav.prev { left: 0; }
+.block.image-carousel .nav.next { right: 0; }
+
+/* Edge gradient fades (shown only when overflow exists) */
+.block.image-carousel::before,
+.block.image-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: var(--edge-fade-w);
+  pointer-events: none;
+  display: none; /* JS toggles .show-fades */
+}
+
+.block.image-carousel.show-fades::before {
+  left: 0; display: block;
+  background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0) 100%);
+}
+.block.image-carousel.show-fades::after {
+  right: 0; display: block;
+  background: linear-gradient(270deg, #fff 0%, rgba(255,255,255,0) 100%);
+}
+
+/* Responsive widths */
+@media (max-width: 900px) {
+  .block.image-carousel { --slide-w: clamp(240px, 34vw, 320px); }
+}
+@media (max-width: 600px) {
+  .block.image-carousel { --slide-w: clamp(240px, 80vw, 360px); }
+}
