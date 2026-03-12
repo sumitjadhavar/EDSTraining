@@ -1,0 +1,87 @@
+/* ============================
+   METRICS BLOCK (icons + number + label)
+=============================== */
+
+.block.metrics {
+  padding: clamp(20px, 6vw, 48px) 16px;
+}
+
+.block.metrics .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 3vw, 48px);
+  align-items: center;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* Each metric item */
+.block.metrics .metric {
+  display: grid;
+  grid-template-columns: auto 1fr;     /* icon | text area */
+  grid-template-areas:
+    "icon number"
+    "icon label";
+  column-gap: 16px;
+  row-gap: 4px;
+  align-items: center;
+  padding: clamp(10px, 2vw, 16px);
+}
+
+.block.metrics .metric .icon {
+  grid-area: icon;
+  display: grid;
+  place-items: center;
+}
+
+.block.metrics .metric .icon img {
+  width: clamp(36px, 4.2vw, 56px);
+  height: clamp(36px, 4.2vw, 56px);
+  object-fit: contain;
+  filter: invert(27%) sepia(83%) saturate(4251%) hue-rotate(346deg)
+          brightness(92%) contrast(97%);  /* tint red if your icons are mono-dark */
+}
+
+/* Number */
+.block.metrics .metric .number {
+  grid-area: number;
+  color: #e41e26;               /* red */
+  font: 700 clamp(20px, 3.2vw, 32px)/1 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Label */
+.block.metrics .metric .label {
+  grid-area: label;
+  color: #222;
+  font: 500 clamp(13px, 1.5vw, 16px)/1.35 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Spacing consistency */
+.block.metrics .metric .number,
+.block.metrics .metric .label {
+  margin: 0;
+}
+
+/* Responsive: 2 per row on tablets, 1 per row on phones */
+@media (max-width: 1000px) {
+  .block.metrics .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 540px) {
+  .block.metrics .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Optional subtle divider style (uncomment if desired) */
+/*
+.block.metrics .metric {
+  border-right: 1px solid #eee;
+}
+.block.metrics .metric:nth-child(4n) { border-right: none; }
+@media (max-width: 1000px) {
+  .block.metrics .metric { border-right: none; }
+}
+*/
+``
