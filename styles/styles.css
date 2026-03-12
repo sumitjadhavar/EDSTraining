@@ -323,3 +323,13 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
+header nav{
+    display: flex;
+    align-items: center;
+}
+header nav .nav-brand{
+    margin-right: auto;
+}
+header nav .nav-sections {
+    margin-left: auto;
+}
