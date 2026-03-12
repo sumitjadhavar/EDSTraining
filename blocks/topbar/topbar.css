@@ -1,0 +1,36 @@
+.block.topbar {
+  background: #e41e26;   /* your red color */
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  padding: 8px 20px;
+}
+
+.block.topbar > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.block.topbar div > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* Icon images */
+.block.topbar img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .block.topbar > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
