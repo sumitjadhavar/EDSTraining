@@ -21,6 +21,10 @@
   height: 80px;
   margin-bottom: 10px;
   object-fit: contain;
+    
+  display: block;
+  margin: 0 auto;
+
 }
 
 .cards > ul > li img {
