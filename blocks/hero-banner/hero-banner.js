@@ -1,47 +1,62 @@
+/**
+ * Hero Banner — robust decorate()
+ * Works with:
+ *  - 2-column table: [image] | [heading + optional link]
+ *  - 1-column table: image and text in same cell
+ * Ensures the image becomes a background layer and text sits on top.
+ */
 
-function getCells(block) {
+function getPrimaryCells(block) {
   const table = block.querySelector('table');
   if (!table) return [];
-  return [...table.querySelectorAll('td, th')];
+  // Prefer first row
+  const row = table.querySelector('tr');
+  if (!row) return [];
+  const cells = [...row.querySelectorAll('td, th')];
+  // If author added multiple rows by mistake, we only consider the first row
+  return cells;
 }
 
-function extractHeadingAndCTA(container) {
-  // Prefer first heading; else gather text nodes/paragraphs.
-  let heading = '';
+function extractTextAndLink(container) {
+  // Gather visible text with line breaks from <p> and <br>
+  const lines = [];
   let ctaEl = container.querySelector('a');
 
-  // Build heading from the first two non-empty lines
-  const textPieces = [];
-  // Preserve line breaks that come from <p>, <br>, or text nodes
-  container.childNodes.forEach((n) => {
-    if (n.nodeType === Node.ELEMENT_NODE) {
-      const tag = n.nodeName.toLowerCase();
-      if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'p') {
-        const t = n.textContent.trim();
-        if (t) textPieces.push(t);
-      } else if (tag === 'br') {
-        textPieces.push('\n');
-      } else if (tag === 'a') {
-        // already captured as ctaEl
-      }
-    } else if (n.nodeType === Node.TEXT_NODE) {
-      const t = n.textContent.replace(/\s+/g, ' ').trim();
-      if (t) textPieces.push(t);
+  // If there are headings, prefer them for title
+  const headings = container.querySelectorAll('h1,h2,h3');
+  if (headings.length) {
+    const t = (headings[0].textContent || '').trim();
+    if (t) lines.push(t);
+    // Also capture next paragraph (optional)
+    const next = headings[0].nextElementSibling;
+    if (next && /p|div/i.test(next.tagName) && next.textContent.trim()) {
+      lines.push(next.textContent.trim());
     }
-  });
-
-  // Reconstruct with up to 2 lines if available
-  const joined = textPieces.join(' ').replace(/\s*\n\s*/g, '\n').trim();
-  const lines = joined.split('\n').map((l) => l.trim()).filter(Boolean);
-  if (lines.length) {
-    heading = lines.slice(0, 2).join('\n'); // keep at most 2 lines
+  } else {
+    // Collect line-like blocks
+    container.childNodes.forEach((n) => {
+      if (n.nodeType === Node.ELEMENT_NODE) {
+        const tag = n.nodeName.toLowerCase();
+        if (tag === 'p' || tag === 'div') {
+          const t = n.textContent.replace(/\s+/g, ' ').trim();
+          if (t) lines.push(t);
+        } else if (tag === 'br') {
+          lines.push('\n');
+        }
+      } else if (n.nodeType === Node.TEXT_NODE) {
+        const t = n.textContent.replace(/\s+/g, ' ').trim();
+        if (t) lines.push(t);
+      }
+    });
   }
 
-  // CTA defaults if not authored as a link
-  let cta = {
-    label: 'READ MORE',
-    href: '#',
-  };
+  // Rebuild keeping at most 2 visual lines for the large title
+  const joined = lines.join(' ').replace(/\s*\n\s*/g, '\n').trim();
+  const titleLines = joined.split('\n').map((l) => l.trim()).filter(Boolean);
+  const title = titleLines.slice(0, 2).join('\n');
+
+  // CTA
+  let cta = null;
   if (ctaEl) {
     cta = {
       label: (ctaEl.textContent || 'READ MORE').trim(),
@@ -49,29 +64,49 @@ function extractHeadingAndCTA(container) {
     };
   }
 
-  return { heading, cta };
+  return { title, cta };
 }
 
 export default function decorate(block) {
   block.classList.add('hero-banner');
 
-  const cells = getCells(block);
-  if (cells.length < 2) return;
+  // 1) Find authored content
+  const cells = getPrimaryCells(block);
+  if (!cells.length) return;
 
-  const leftCell = cells[0];
-  const rightCell = cells[1];
+  // Look for an image anywhere inside these cells
+  let imgEl = null;
+  let textCell = null;
 
-  // Background image from left cell
-  const img = leftCell.querySelector('img');
-  const bgUrl = img ? img.currentSrc || img.src : '';
+  if (cells.length === 1) {
+    // Single cell: try to find image + text in same cell
+    const c0 = cells[0];
+    imgEl = c0.querySelector('img');
+    textCell = c0;
+  } else {
+    // Two cells: prefer image in first, text in second; else detect by presence
+    const [c0, c1] = cells;
+    const img0 = c0.querySelector('img');
+    const img1 = c1.querySelector('img');
+    if (img0 && !img1) {
+      imgEl = img0;
+      textCell = c1;
+    } else if (img1 && !img0) {
+      imgEl = img1;
+      textCell = c0;
+    } else {
+      // both or none – pick first image we find; the other becomes text
+      imgEl = (block.querySelector('img')) || null;
+      textCell = imgEl ? (imgEl.closest('td,th') === c0 ? c1 : c0) : c1 || c0;
+    }
+  }
 
-  // Heading + CTA from right cell
-  const { heading, cta } = extractHeadingAndCTA(rightCell);
+  const bgUrl = imgEl ? (imgEl.currentSrc || imgEl.src) : '';
+  const { title, cta } = extractTextAndLink(textCell || block);
 
-  // Rebuild block content
+  // 2) Rebuild block content: background, shade, content
   block.innerHTML = '';
 
-  // Background & shade layers
   const bg = document.createElement('div');
   bg.className = 'hb-bg';
   if (bgUrl) bg.style.backgroundImage = `url("${bgUrl}")`;
@@ -79,25 +114,23 @@ export default function decorate(block) {
   const shade = document.createElement('div');
   shade.className = 'hb-shade';
 
-  // Content
   const content = document.createElement('div');
   content.className = 'hb-content';
 
   const h = document.createElement('h2');
   h.className = 'hb-title';
-  // Convert internal newlines to <br> for two-line layout
-  h.innerHTML = (heading || '').replace(/\n/g, '<br>');
+  h.innerHTML = (title || '').replace(/\n/g, '<br>');
   content.appendChild(h);
 
   const a = document.createElement('a');
   a.className = 'hb-cta';
-  a.href = cta.href || '#';
-  a.innerHTML = `${cta.label} <span class="chev">»</span>`;
+  a.href = (cta && cta.href) ? cta.href : '#';
+  a.textContent = (cta && cta.label) ? cta.label : 'READ MORE';
   content.appendChild(a);
 
   block.append(bg, shade, content);
 
-  // a11y landmarks
+  // 3) Accessibility
   block.setAttribute('role', 'region');
   block.setAttribute('aria-label', 'Hero banner');
 }
