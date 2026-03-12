@@ -1,0 +1,87 @@
+/* ================================
+    SERVICES GRID BLOCK
+================================ */
+
+.block.services-grid {
+  padding: 40px 20px;
+}
+
+/* Main grid */
+.block.services-grid .sg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* Each card */
+.block.services-grid .sg-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 36px 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+  position: relative;
+  text-align: center;
+}
+
+/* Hover effect */
+.block.services-grid .sg-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+
+/* Icon */
+.block.services-grid .sg-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 18px;
+  filter: invert(27%) sepia(83%) saturate(4251%) hue-rotate(346deg) brightness(92%) contrast(97%);
+}
+
+/* Title */
+.block.services-grid .sg-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+/* Description */
+.block.services-grid .sg-card p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Red arrow button */
+.block.services-grid .sg-card .arrow-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #e41e26;
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+/* Highlighted card (gold) */
+.block.services-grid .sg-card.highlighted {
+  background: #df8f1f !important;
+  color: #fff;
+}
+
+.block.services-grid .sg-card.highlighted h3,
+.block.services-grid .sg-card.highlighted p {
+  color: #fff;
+}
+
+.block.services-grid .sg-card.highlighted .arrow-btn {
+  background: #fff;
+  color: #df8f1f;
+}
