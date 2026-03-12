@@ -1,46 +1,49 @@
-
+/* ============================
+   HERO BANNER (EDS block)
+   - Background image as layer
+   - Dark overlay for contrast
+   - Title left, CTA right (stacks on mobile)
+=============================== */
 
 .block.hero-banner {
   position: relative;
-  min-height: clamp(260px, 45vw, 420px);
-  isolation: isolate;            /* keep overlay stacking contained */
+  min-height: clamp(280px, 45vw, 460px);
+  isolation: isolate;        /* contain z-index stacking */
   overflow: hidden;
 }
 
-/* Background image layer */
+/* Background image */
 .block.hero-banner .hb-bg {
   position: absolute;
   inset: 0;
   background-position: center;
   background-size: cover;
+  background-repeat: no-repeat;
   z-index: -2;
+  transform: translateZ(0);  /* fix repaint issues on some browsers */
 }
 
-/* Dark overlay to ensure legible white text */
+/* Dark overlay */
 .block.hero-banner .hb-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.55) 100%
-  );
+  background: rgba(0,0,0,0.5);
   z-index: -1;
 }
 
-/* Content area */
+/* Content grid */
 .block.hero-banner .hb-content {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr auto;  /* heading left, CTA right */
+  grid-template-columns: 1fr auto;   /* title | cta */
   align-items: center;
-  gap: clamp(12px, 3vw, 32px);
-  padding: clamp(20px, 5vw, 56px);
+  gap: clamp(12px, 3vw, 36px);
+  padding: clamp(20px, 5vw, 64px);
   max-width: 1200px;
   margin-inline: auto;
 }
 
-/* Heading */
+/* Title */
 .block.hero-banner .hb-title {
   color: #fff;
   margin: 0;
@@ -51,7 +54,7 @@
   text-wrap: balance;
 }
 
-/* CTA */
+/* CTA pill */
 .block.hero-banner .hb-cta {
   justify-self: end;
   align-self: center;
@@ -69,23 +72,17 @@
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
-.block.hero-banner .hb-cta .chev {
-  font-size: 1.15em;
-  line-height: 1;
-}
-
 .block.hero-banner .hb-cta:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 3px;
 }
-
 .block.hero-banner .hb-cta:hover {
   transform: translateY(-1px);
   background: #cf1b22;
   box-shadow: 0 10px 28px rgba(228, 30, 38, 0.34);
 }
 
-/* Mobile: stack title over CTA */
+/* Small screens: stack */
 @media (max-width: 820px) {
   .block.hero-banner .hb-content {
     grid-template-columns: 1fr;
