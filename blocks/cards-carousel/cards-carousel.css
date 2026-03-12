@@ -1,0 +1,135 @@
+/* --- Cards Carousel (EDS) -------------------------------------------- */
+
+.block.cards-carousel {
+  position: relative;
+  --gap: 16px;
+  /* Width of each card: 4–5 visible on desktop, 2–3 on tablet, 1–2 on mobile */
+  --card-w: clamp(220px, 20vw, 280px);
+  --card-img-h: 160px;
+  --edge-fade-w: 40px; /* for gradient fades */
+  background: transparent;
+}
+
+/* Horizontal scroller */
+.block.cards-carousel .scroller {
+  display: flex;
+  overflow-x: auto;
+  gap: var(--gap);
+  padding: 0 calc(var(--edge-fade-w) + 12px) 12px; /* space for fades & arrows */
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: calc(var(--edge-fade-w) + 12px);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar (visible but subtle; feel free to hide if your design requires) */
+.block.cards-carousel .scroller::-webkit-scrollbar { height: 8px; }
+.block.cards-carousel .scroller::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+/* Card base */
+.block.cards-carousel .card {
+  flex: 0 0 var(--card-w);
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.block.cards-carousel .card a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+}
+
+.block.cards-carousel .card picture img {
+  display: block;
+  width: 100%;
+  height: var(--card-img-h);
+  object-fit: cover;
+}
+
+.block.cards-carousel .card .body {
+  padding: 12px 14px 16px;
+}
+
+.block.cards-carousel .card h3 {
+  margin: 0 0 6px;
+  font: 600 1rem/1.3 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.block.cards-carousel .card p {
+  margin: 0;
+  color: #444;
+  font: 400 0.9rem/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Prev/Next nav buttons (progressive enhancement) */
+.block.cards-carousel .nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--edge-fade-w);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* container doesn't block scroll */
+}
+
+.block.cards-carousel .nav button {
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.block.cards-carousel .nav button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.block.cards-carousel .nav.prev { left: 0; }
+.block.cards-carousel .nav.next { right: 0; }
+
+/* Edge fades: only shown when content overflows (JS toggles .show-fades) */
+.block.cards-carousel::before,
+.block.cards-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: var(--edge-fade-w);
+  pointer-events: none;
+  display: none;
+}
+
+.block.cards-carousel.show-fades::before {
+  left: 0;
+  display: block;
+  background: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.block.cards-carousel.show-fades::after {
+  right: 0;
+  display: block;
+  background: linear-gradient(270deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+  .block.cards-carousel { --card-w: clamp(240px, 32vw, 280px); }
+  .block.cards-carousel { --card-img-h: 150px; }
+}
+
+@media (max-width: 600px) {
+  .block.cards-carousel { --card-w: clamp(240px, 72vw, 320px); }
+  .block.cards-carousel { --card-img-h: 140px; }
+}
