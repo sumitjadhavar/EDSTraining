@@ -5,7 +5,8 @@
 
 .scrolling-text p {
   display: inline-block;
-  font-size: 80px;
+  font-size: 120px;
+  letter-spacing: 5px;
   font-weight: 600;
   color: transparent ;
   -webkit-text-stroke: 1px #ccc;
