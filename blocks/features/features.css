@@ -1,0 +1,74 @@
+/* ============================
+   FEATURES BLOCK
+=============================== */
+
+.block.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
+  padding: 40px 20px;
+}
+
+/* Card layout */
+.block.features .feature-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.06);
+  position: relative;
+  text-align: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.block.features .feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+}
+
+/* Icon */
+.block.features .feature-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+/* Card title */
+.block.features .feature-card h3 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* Description */
+.block.features .feature-card p {
+  margin: 0;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Number in top-right */
+.block.features .feature-number {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #e6e6e6;
+  pointer-events: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .block.features {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .block.features {
+    grid-template-columns: 1fr;
+  }
+}
