@@ -1,10 +1,4 @@
-/**
- * Hero Banner — EDS block decorate()
- * Authoring:
- *  - 2-column table
- *  - Left cell: background image
- *  - Right cell: heading (1–2 lines) and an inline link for CTA
- */
+
 function getCells(block) {
   const table = block.querySelector('table');
   if (!table) return [];
