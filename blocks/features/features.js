@@ -1,12 +1,9 @@
-/**
- * Features Block - AEM EDS
- * Converts author table rows into styled feature cards
- */
-
 export default function decorate(block) {
-  const rows = [...block.querySelectorAll('tr')];
+  // Find rows inside the table
+  const rows = [...block.querySelectorAll('table tr')];
+  if (!rows.length) return;
 
-  // Reset block content
+  // Clear block HTML
   block.innerHTML = '';
   block.classList.add('features');
 
@@ -17,28 +14,28 @@ export default function decorate(block) {
     const card = document.createElement('div');
     card.className = 'feature-card';
 
-    // Extract author content
-    const icon = cells[0].querySelector('img')?.cloneNode(true);
-    const title = cells[1].textContent.trim();
-    const desc = cells[2].textContent.trim();
-
     // Icon
-    if (icon) card.append(icon);
+    const icon = cells[0].querySelector('img');
+    if (icon) {
+      const cloned = icon.cloneNode(true);
+      cloned.classList.add('feature-icon');
+      card.append(cloned);
+    }
 
     // Title
-    const h3 = document.createElement('h3');
-    h3.textContent = title;
-    card.append(h3);
+    const title = document.createElement('h3');
+    title.textContent = cells[1].textContent.trim();
+    card.append(title);
 
     // Description
-    const p = document.createElement('p');
-    p.textContent = desc;
-    card.append(p);
+    const desc = document.createElement('p');
+    desc.textContent = cells[2].textContent.trim();
+    card.append(desc);
 
-    // Number (01, 02, 03…)
+    // Auto numbering
     const number = document.createElement('div');
     number.className = 'feature-number';
-    number.textContent = (index + 1).toString().padStart(2, '0');
+    number.textContent = String(index + 1).padStart(2, '0');
     card.append(number);
 
     block.append(card);
